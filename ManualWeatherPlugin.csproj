@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <CreateCipx>true</CreateCipx>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <ClassIslandPluginSdkVersion>2.1.0.1</ClassIslandPluginSdkVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ClassIsland.PluginSdk" Version="$(ClassIslandPluginSdkVersion)">
+            <ExcludeAssets>runtime; native</ExcludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="manifest.yml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="README.md">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="icon.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <Target Name="RemoveHostAssembliesFromPlugin" BeforeTargets="CreateCipx">
+        <ItemGroup>
+            <_BundledHostAssembly Include="$(OutputPath)ClassIsland.Platforms.Abstractions.dll"/>
+            <_BundledHostAssembly Include="$(OutputPath)ClassIsland.Platforms.Abstractions.pdb"/>
+            <_BundledHostAssembly Include="$(OutputPath)ClassIsland.Platforms.Abstractions.xml"/>
+            <_BundledHostAssembly Include="$(OutputPath)ClassIsland.Shared.dll"/>
+            <_BundledHostAssembly Include="$(OutputPath)ClassIsland.Shared.pdb"/>
+            <_BundledHostAssembly Include="$(OutputPath)ClassIsland.Shared.xml"/>
+            <_BundledHostAssembly Include="$(OutputPath)ClassIsland.Shared.IPC.dll"/>
+            <_BundledHostAssembly Include="$(OutputPath)ClassIsland.Shared.IPC.pdb"/>
+            <_BundledHostAssembly Include="$(OutputPath)ClassIsland.Shared.IPC.xml"/>
+        </ItemGroup>
+        <Delete Files="@(_BundledHostAssembly)" Condition="Exists('%(FullPath)')"/>
+    </Target>
+
+</Project>

@@ -1,0 +1,133 @@
+<ci:SettingsPageBase
+    x:Class="ManualWeatherPlugin.Views.SettingsPages.ManualWeatherSettingsPage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ci="http://classisland.tech/schemas/xaml/core"
+    xmlns:controls="using:FluentAvalonia.UI.Controls"
+    xmlns:chart="clr-namespace:ManualWeatherPlugin.Controls"
+    xmlns:local="clr-namespace:ManualWeatherPlugin.Views.SettingsPages"
+    x:DataType="local:ManualWeatherSettingsPage">
+    <ScrollViewer>
+        <StackPanel Classes="settings-container animated-intro" Spacing="12">
+            <StackPanel Spacing="4">
+                <TextBlock Text="手动天气" FontSize="28" FontWeight="SemiBold"/>
+                <TextBlock
+                    Classes="l-instructive"
+                    Text="不访问网络。输入当天最低温和最高温，ClassIsland 会估算完整的全天温度曲线。"
+                    TextWrapping="Wrap"/>
+            </StackPanel>
+
+            <controls:SettingsExpander
+                Header="温度范围"
+                Description="最低温和最高温会自动保持正确顺序。"
+                IsExpanded="True">
+                <StackPanel Spacing="12">
+                    <Grid ColumnDefinitions="*,180" Margin="0 4">
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="最低温" FontWeight="SemiBold"/>
+                            <TextBlock Classes="l-instructive" Text="清晨可能出现的最低温度"/>
+                        </StackPanel>
+                        <controls:NumberBox
+                            Grid.Column="1"
+                            Minimum="-60"
+                            Maximum="60"
+                            SpinButtonPlacementMode="Compact"
+                            Value="{Binding Settings.LowTemperature, Mode=TwoWay}"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,180" Margin="0 4">
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="最高温" FontWeight="SemiBold"/>
+                            <TextBlock Classes="l-instructive" Text="午后可能出现的最高温度"/>
+                        </StackPanel>
+                        <controls:NumberBox
+                            Grid.Column="1"
+                            Minimum="-60"
+                            Maximum="60"
+                            SpinButtonPlacementMode="Compact"
+                            Value="{Binding Settings.HighTemperature, Mode=TwoWay}"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto" Margin="0 4">
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="省略温度小数" FontWeight="SemiBold"/>
+                            <TextBlock Classes="l-instructive" Text="开启后，天气温度和悬停提示都四舍五入为整数。"/>
+                        </StackPanel>
+                        <ToggleSwitch
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding Settings.HideTemperatureDecimal, Mode=TwoWay}"/>
+                    </Grid>
+                </StackPanel>
+            </controls:SettingsExpander>
+
+            <controls:SettingsExpander
+                Header="曲线时刻"
+                Description="默认假设约 05:00 最冷、14:00 最热，可按实际地区微调。"
+                IsExpanded="True">
+                <StackPanel Spacing="12">
+                    <Grid ColumnDefinitions="*,180" Margin="0 4">
+                        <TextBlock Text="最低温出现时刻" VerticalAlignment="Center"/>
+                        <controls:NumberBox
+                            Grid.Column="1"
+                            Minimum="0"
+                            Maximum="23.9"
+                            SpinButtonPlacementMode="Compact"
+                            Value="{Binding Settings.LowestTemperatureHour, Mode=TwoWay}"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,180" Margin="0 4">
+                        <TextBlock Text="最高温出现时刻" VerticalAlignment="Center"/>
+                        <controls:NumberBox
+                            Grid.Column="1"
+                            Minimum="0"
+                            Maximum="23.9"
+                            SpinButtonPlacementMode="Compact"
+                            Value="{Binding Settings.HighestTemperatureHour, Mode=TwoWay}"/>
+                    </Grid>
+                    <TextBlock Classes="l-instructive" Text="数值为一天中的小时数，例如 14.5 表示 14:30。"/>
+                </StackPanel>
+            </controls:SettingsExpander>
+
+            <controls:SettingsExpander
+                Header="天气状态"
+                Description="用于现有天气组件和天气提醒中的天气图标。"
+                IsExpanded="True">
+                <ComboBox
+                    HorizontalAlignment="Stretch"
+                    ItemsSource="{Binding WeatherService.WeatherStatusList}"
+                    SelectedValue="{Binding Settings.WeatherCode, Mode=TwoWay}"
+                    SelectedValueBinding="{Binding Code}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Weather}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </controls:SettingsExpander>
+
+            <Border
+                Padding="16"
+                BorderThickness="1"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                CornerRadius="10">
+                <StackPanel Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Text="全天温度预览" FontWeight="SemiBold"/>
+                        <TextBlock Grid.Column="1" Text="{Binding TemperatureRangeText}" Classes="l-instructive"/>
+                    </Grid>
+                    <chart:TemperatureCurveControl
+                        Height="180"
+                        Values="{Binding PreviewTemperatures}"
+                        LowTemperature="{Binding Settings.LowTemperature}"
+                        HighTemperature="{Binding Settings.HighTemperature}"
+                        OmitDecimalPoint="{Binding Settings.HideTemperatureDecimal}"/>
+                    <Grid ColumnDefinitions="*,*,*">
+                        <TextBlock Text="00:00" Classes="l-instructive"/>
+                        <TextBlock Grid.Column="1" Text="12:00" Classes="l-instructive" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="23:00" Classes="l-instructive" HorizontalAlignment="Right"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Button HorizontalAlignment="Left" Click="ApplyButton_OnClick" Content="重新计算并立即应用"/>
+        </StackPanel>
+    </ScrollViewer>
+</ci:SettingsPageBase>

@@ -1,0 +1,20 @@
+# nonk8s
+# 插件清单文件使用 YAML 格式存储。
+# YAML 教程：https://www.runoob.com/w3cnote/yaml-intro.html
+# 插件清单格式：https://docs.classisland.tech/zh-cn/latest/dev/plugins/create-project/#%E6%8F%92%E4%BB%B6%E6%B8%85%E5%8D%95%E6%96%87%E4%BB%B6
+
+id: classisland.manualweather
+name: 手动天气
+description: 在网络不可用时离线推算天气温度
+entranceAssembly: "ManualWeatherPlugin.dll"
+url: https://github.com/MrShucang/ManualWeatherPlugin
+version: 1.0.5.0
+apiVersion: 2.0.0.0
+author: MrShucang
+repoOwner: MrShucang
+repoName: ManualWeatherPlugin
+assetsRoot: main
+artifactName: plugin.cipx
+tagPattern: 1.*.*.*
+supportedOSPlatforms:
+  - Windows
