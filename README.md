@@ -45,4 +45,4 @@ ManualWeatherPlugin\cipx\ManualWeatherPlugin.cipx
 
 ## 许可证
 
-本项目使用 MIT License，详见 [LICENSE](LICENSE)。
+本项目使用 MIT License，详见 [LICENSE](https://github.com/MrShucang/ManualWeatherPlugin/blob/main/LICENSE)。
