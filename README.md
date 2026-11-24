@@ -33,15 +33,8 @@
 
 ## 构建
 
-```powershell
-dotnet build ManualWeatherPlugin.csproj -c Debug
-```
-
-插件包输出到：
-
-```text
-ManualWeatherPlugin\cipx\ManualWeatherPlugin.cipx
-```
+1. 在仓库根目录运行 `dotnet build ManualWeatherPlugin.csproj -c Debug`。
+2. 构建完成后，插件包位于 `cipx/ManualWeatherPlugin.cipx`。
 
 ## 许可证
 
